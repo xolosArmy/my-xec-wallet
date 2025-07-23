@@ -1,23 +1,31 @@
+// saldo.js – muestra dirección y saldo disponible en XEC
+// Requiere: cartera.json (con mnemonic) en el mismo folder
+
+import fs from 'fs';
 import { Wallet } from 'ecash-wallet';
 import { ChronikClient } from 'chronik-client';
-import fs from 'fs';
 
-const main = async () => {
-  const chronik = new ChronikClient('https://chronik.e.cash');
+// --- 1. Cargamos frase de recuperación ------------------------------------
+const { mnemonic } = JSON.parse(fs.readFileSync('cartera.json', 'utf8'));
 
-  // Leer la cartera desde el archivo
-  const raw = fs.readFileSync('cartera.json');
-  const { mnemonic } = JSON.parse(raw);
+// --- 2. Inicializamos Chronik (instancia pública) --------------------------
+const chronik = new ChronikClient('https://chronik.e.cash');
 
-  // Restaurar el wallet y sincronizar
-  const wallet = Wallet.fromMnemonic(mnemonic, chronik);
-  await wallet.sync();
+// --- 3. Reconstruimos el wallet y lo sincronizamos -------------------------
+const wallet = Wallet.fromMnemonic(mnemonic, chronik);
+await wallet.sync();                                  // actualiza UTXOs
 
-  // Obtener saldo disponible
-  const utxos = wallet.spendableSatsOnlyUtxos();
-  const total = Wallet.sumUtxosSats(utxos);
+// --- 4. Obtenemos UTXOs directamente con Chronik ---------------------------
+// Nota: .getUtxos() ya no existe en ecash-wallet v0.12+.  Usamos Chronik.
+const { address } = wallet;                           // ej. ecash:q....
+const utxoRes = await chronik.address(address).utxos();
 
-  console.log('\n💰 Saldo disponible: ' + Number(total) / 1e8 + ' XEC');
-};
+const totalSats = utxoRes.utxos
+  .reduce((acc, utxo) => acc + BigInt(utxo.sats), 0n);
 
-main();
+// eCash: 1 XEC  = 100 sats → dividimos entre 100 para mostrar 2 decimales
+const balanceXec = Number(totalSats) / 100;
+
+console.log(`\n🏦 Dirección: ${address}`);
+console.log(`💰 Saldo disponible: ${balanceXec.toFixed(2)} XEC`);
+
