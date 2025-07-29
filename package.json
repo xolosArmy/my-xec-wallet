@@ -1,6 +1,7 @@
 {
   "type": "module",
   "dependencies": {
+    "@abandonware/bleno": "^0.6.2",
     "bip39": "^3.1.0",
     "ecash-wallet": "^1.0.1"
   }
