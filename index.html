@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>XEC Bluetooth Wallet</title>
+</head>
+<body>
+  <h1>XEC Bluetooth Wallet</h1>
+  <section>
+    <h2>Initialize Wallet</h2>
+    <textarea id="mnemonic" placeholder="Mnemonic" rows="2" cols="60"></textarea><br />
+    <button id="init">Init Wallet</button>
+    <div id="address"></div>
+  </section>
+
+  <section>
+    <h2>Send Transaction</h2>
+    <input id="to" placeholder="Destination address" size="60" />
+    <input id="amount" type="number" placeholder="Satoshis" />
+    <button id="send">Send via Bluetooth</button>
+  </section>
+
+  <section>
+    <h2>Receive / Broadcast</h2>
+    <button id="receive">Receive TX via Bluetooth</button>
+    <button id="broadcast">Broadcast Stored TXs</button>
+  </section>
+
+  <pre id="log"></pre>
+
+  <script src="https://unpkg.com/ecash-lib@1.0.3/dist/index.umd.js"></script>
+  <script src="https://unpkg.com/chronik-client@0.6.19/dist/index.umd.js"></script>
+  <script src="./bluetooth-wallet.js"></script>
+  <script>
+    const logEl = document.getElementById('log');
+    const log = (msg) => (logEl.textContent += msg + '\n');
+
+    document.getElementById('init').addEventListener('click', async () => {
+      const mnemonic = document.getElementById('mnemonic').value.trim();
+      if (!mnemonic) return alert('Provide mnemonic');
+      try {
+        const addr = await initWallet(mnemonic);
+        document.getElementById('address').textContent = 'Address: ' + addr;
+        log('Wallet initialized');
+      } catch (e) {
+        log('Init error: ' + e.message);
+      }
+    });
+
+    document.getElementById('send').addEventListener('click', async () => {
+      const to = document.getElementById('to').value.trim();
+      const amt = document.getElementById('amount').value;
+      if (!to || !amt) return alert('Provide destination and amount');
+      try {
+        const rawTx = await createRawTransaction(to, BigInt(amt));
+        await sendTxViaBluetooth(rawTx);
+        log('TX built and sent');
+      } catch (e) {
+        log('Send error: ' + e.message);
+      }
+    });
+
+    document.getElementById('receive').addEventListener('click', async () => {
+      try {
+        await receiveTxViaBluetooth();
+        log('Listening for TX');
+      } catch (e) {
+        log('Receive error: ' + e.message);
+      }
+    });
+
+    document.getElementById('broadcast').addEventListener('click', async () => {
+      try {
+        await broadcastStoredTxs();
+        log('Broadcast attempt finished');
+      } catch (e) {
+        log('Broadcast error: ' + e.message);
+      }
+    });
+  </script>
+</body>
+</html>
