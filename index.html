@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XEC Bluetooth Wallet</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Xolos RMZ Logo" class="logo">
+    <h1>Xolos RMZ Wallet</h1>
+  </header>
+
+  <main>
+    <section id="wallet-section">
+      <h2>Wallet Info</h2>
+      <p><strong>Address:</strong> <span id="wallet-address">-</span></p>
+      <p><strong>XEC Balance:</strong> <span id="xec-balance">0.00</span> XEC</p>
+      <p><strong>RMZ Balance:</strong> <span id="rmz-balance">0</span> RMZ</p>
+      <button id="connect-wallet">Connect Wallet</button>
+    </section>
+
+    <section id="send-xec-section">
+      <h2>Send XEC</h2>
+      <input type="text" id="send-to-address" placeholder="Recipient Address (ecash:)" />
+      <input type="number" id="send-amount" placeholder="Amount (XEC)" />
+      <button id="send-xec-btn">Send XEC</button>
+      <p id="send-xec-status"></p>
+    </section>
+
+    <section id="send-rmz-section">
+      <h2>Send RMZ Token</h2>
+      <input type="text" id="send-rmz-to-address" placeholder="Recipient Address (ecash:)" />
+      <input type="number" id="send-rmz-amount" placeholder="Amount (RMZ)" />
+      <button id="send-rmz-btn">Send RMZ</button>
+      <p id="send-rmz-status"></p>
+    </section>
+
+    <section id="bluetooth-send-section">
+      <h2>Send via Bluetooth</h2>
+      <button id="generate-raw-tx-btn">Generate Raw TX</button>
+      <textarea id="raw-tx-output" rows="5" readonly></textarea>
+      <button id="send-bluetooth-btn">Send TX via Bluetooth</button>
+      <p id="bluetooth-send-status"></p>
+    </section>
+
+    <section id="bluetooth-receive-section">
+      <h2>Receive via Bluetooth</h2>
+      <button id="receive-bluetooth-btn">Receive TX via Bluetooth</button>
+      <textarea id="received-raw-tx" rows="5" readonly></textarea>
+      <button id="broadcast-received-tx-btn">Broadcast Received TX</button>
+      <p id="bluetooth-receive-status"></p>
+    </section>
+  </main>
+
+  <nav>
+    <button onclick="showSection('wallet-section')">Wallet</button>
+    <button onclick="showSection('send-xec-section')">Send XEC</button>
+    <button onclick="showSection('send-rmz-section')">Send RMZ</button>
+    <button onclick="showSection('bluetooth-send-section')">Bluetooth Send</button>
+    <button onclick="showSection('bluetooth-receive-section')">Bluetooth Receive</button>
+  </nav>
+
+  <script src="ecash-lib.js"></script>
+  <script src="chronik-client.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
