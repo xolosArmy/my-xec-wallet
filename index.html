@@ -13,19 +13,21 @@
   </header>
 
   <main>
-    <section id="wallet-section">
+    <section id="balance-section">
       <h2>Wallet Info</h2>
       <p><strong>Address:</strong> <span id="wallet-address">-</span></p>
       <p><strong>XEC Balance:</strong> <span id="xec-balance">0.00</span> XEC</p>
       <p><strong>RMZ Balance:</strong> <span id="rmz-balance">0</span> RMZ</p>
-      <button id="connect-wallet">Connect Wallet</button>
+      <button id="connect-wallet-btn">Connect Wallet</button>
     </section>
 
     <section id="send-xec-section">
       <h2>Send XEC</h2>
-      <input type="text" id="send-to-address" placeholder="Recipient Address (ecash:)" />
-      <input type="number" id="send-amount" placeholder="Amount (XEC)" />
-      <button id="send-xec-btn">Send XEC</button>
+      <form id="send-xec-form">
+        <input type="text" id="send-to-address" placeholder="Recipient Address (ecash:)" />
+        <input type="number" id="send-amount" placeholder="Amount (XEC)" />
+        <button type="submit" id="send-xec-btn">Send XEC</button>
+      </form>
       <p id="send-xec-status"></p>
     </section>
 
@@ -37,29 +39,30 @@
       <p id="send-rmz-status"></p>
     </section>
 
-    <section id="bluetooth-send-section">
-      <h2>Send via Bluetooth</h2>
-      <button id="generate-raw-tx-btn">Generate Raw TX</button>
-      <textarea id="raw-tx-output" rows="5" readonly></textarea>
-      <button id="send-bluetooth-btn">Send TX via Bluetooth</button>
-      <p id="bluetooth-send-status"></p>
-    </section>
-
-    <section id="bluetooth-receive-section">
-      <h2>Receive via Bluetooth</h2>
-      <button id="receive-bluetooth-btn">Receive TX via Bluetooth</button>
-      <textarea id="received-raw-tx" rows="5" readonly></textarea>
-      <button id="broadcast-received-tx-btn">Broadcast Received TX</button>
-      <p id="bluetooth-receive-status"></p>
+    <section id="bluetooth-section">
+      <h2>Bluetooth</h2>
+      <div>
+        <h3>Send via Bluetooth</h3>
+        <button id="generate-raw-tx-btn">Generate Raw TX</button>
+        <textarea id="raw-tx-output" rows="5" readonly></textarea>
+        <button id="send-bluetooth-btn">Send TX via Bluetooth</button>
+        <p id="bluetooth-send-status"></p>
+      </div>
+      <div>
+        <h3>Receive via Bluetooth</h3>
+        <button id="receive-bluetooth-btn">Receive TX via Bluetooth</button>
+        <textarea id="received-raw-tx" rows="5" readonly></textarea>
+        <button id="broadcast-received-tx-btn">Broadcast Received TX</button>
+        <p id="bluetooth-receive-status"></p>
+      </div>
     </section>
   </main>
 
   <nav>
-    <button onclick="showSection('wallet-section')">Wallet</button>
+    <button onclick="showSection('balance-section')">Balance</button>
     <button onclick="showSection('send-xec-section')">Send XEC</button>
     <button onclick="showSection('send-rmz-section')">Send RMZ</button>
-    <button onclick="showSection('bluetooth-send-section')">Bluetooth Send</button>
-    <button onclick="showSection('bluetooth-receive-section')">Bluetooth Receive</button>
+    <button onclick="showSection('bluetooth-section')">Bluetooth</button>
   </nav>
 
   <script src="ecash-lib.js"></script>
