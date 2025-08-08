@@ -6,15 +6,23 @@ let wallet = null;
 let connectedMnemonic = null;
 
 const addressDisplay = document.getElementById("wallet-address");
-const xecBalanceDisplay = document.getElementById("xecBalance");
-const rmzBalanceDisplay = document.getElementById("rmzBalance");
-const sendForm = document.getElementById("sendForm");
-const sendStatus = document.getElementById("sendStatus");
-const connectBtn = document.getElementById("connect-wallet");
-const sendBluetoothBtn = document.getElementById("send-bluetooth");
-const receiveBluetoothBtn = document.getElementById("receive-bluetooth");
+const xecBalanceDisplay = document.getElementById("xec-balance");
+const rmzBalanceDisplay = document.getElementById("rmz-balance");
+const sendForm = document.getElementById("send-xec-form");
+const sendStatus = document.getElementById("send-xec-status");
+const connectBtn = document.getElementById("connect-wallet-btn");
+const sendBluetoothBtn = document.getElementById("send-bluetooth-btn");
+const receiveBluetoothBtn = document.getElementById("receive-bluetooth-btn");
 
 const RMZ_TOKEN_ID = "9e0a9d4720782cf661beaea6c5513f1972e0f3b1541ba4c83f4c87ef65f843dc";
+
+function showSection(sectionId) {
+    const sections = document.querySelectorAll('main > section');
+    sections.forEach(section => {
+        section.style.display = section.id === sectionId ? 'block' : 'none';
+    });
+}
+window.showSection = showSection;
 
 // Connect wallet with mnemonic
 connectBtn.addEventListener("click", async () => {
@@ -63,8 +71,8 @@ async function updateBalances(address) {
 
 sendForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const to = document.getElementById("to").value;
-    const amount = parseFloat(document.getElementById("amount").value);
+    const to = document.getElementById("send-to-address").value;
+    const amount = parseFloat(document.getElementById("send-amount").value);
     const sats = BigInt(Math.round(amount * 100));
 
     try {
@@ -110,4 +118,7 @@ receiveBluetoothBtn.addEventListener("click", async () => {
 });
 
 // Init if mnemonic exists
-window.addEventListener("load", initializeWallet);
+window.addEventListener("load", () => {
+    initializeWallet();
+    showSection('balance-section');
+});
